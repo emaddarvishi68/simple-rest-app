@@ -1,4 +1,4 @@
-package com.emad.simplerestapp.model.helper;
+package com.emad.simplerestapp.helper;
 
 public class TableName {
 

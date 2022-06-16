@@ -1,7 +1,8 @@
 package com.emad.simplerestapp.model;
 
-import com.emad.simplerestapp.model.helper.TableName;
+import com.emad.simplerestapp.helper.TableName;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,13 +14,18 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Todo implements Serializable {
+public class Todo extends RepresentationModel<Todo> implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
+    @JoinColumn(name = "id", updatable = false, insertable = false)
+    @Transient
     private User user;
+
+    @Column(name = "userId", nullable = false)
+    private int userId;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)

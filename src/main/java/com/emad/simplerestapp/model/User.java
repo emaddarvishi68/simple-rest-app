@@ -1,7 +1,8 @@
 package com.emad.simplerestapp.model;
 
-import com.emad.simplerestapp.model.helper.TableName;
+import com.emad.simplerestapp.helper.TableName;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,10 +14,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class User implements Serializable {
-
+public class User extends RepresentationModel<User> implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false, length = 63)
     private String name;
@@ -38,7 +38,7 @@ public class User implements Serializable {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class Address implements Serializable{
+    public static class Address implements Serializable {
         String street;
         String suite;
         String city;
@@ -50,7 +50,7 @@ public class User implements Serializable {
         @AllArgsConstructor
         @NoArgsConstructor
         @ToString
-        public static class Geo implements Serializable{
+        public static class Geo implements Serializable {
             String lat;
             String lng;
         }
@@ -61,8 +61,9 @@ public class User implements Serializable {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class Company implements Serializable{
-        String companyName;
+    public static class Company implements Serializable {
+        @Column(insertable = false, updatable = false)
+        String name;
         String catchPhrase;
         String bs;
     }

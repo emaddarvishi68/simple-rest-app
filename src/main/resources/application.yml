@@ -11,7 +11,7 @@ logging:
                 jdbc:
                     core:
                         JdbcTemplate: DEBUG
-                        StatementCreatorUtils: TRACE
+                        StatementCreatorUtils: INFO
 spring:
     datasource:
         driverClassName: org.h2.Driver
