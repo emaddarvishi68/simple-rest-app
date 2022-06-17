@@ -1,6 +1,6 @@
 package com.emad.simplerestapp.model;
 
-import com.emad.simplerestapp.helper.TableName;
+import com.emad.simplerestapp.staticvalues.TableName;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -12,9 +12,11 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(callSuper = false)
+@NamedQueries({@NamedQuery(name = Comment.GET_COMMENTS_BY_POST_ID, query = "select c from Comment c where c.postId = ?1 ")})
 public class Comment extends RepresentationModel<Comment> implements Serializable {
+
+    public static final String GET_COMMENTS_BY_POST_ID = "Comment.getCommentsByPostId";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

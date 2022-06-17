@@ -1,6 +1,6 @@
 package com.emad.simplerestapp.model;
 
-import com.emad.simplerestapp.helper.TableName;
+import com.emad.simplerestapp.staticvalues.TableName;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -12,8 +12,6 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-@ToString
 public class User extends RepresentationModel<User> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +35,6 @@ public class User extends RepresentationModel<User> implements Serializable {
     @Embeddable
     @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class Address implements Serializable {
         String street;
         String suite;
@@ -49,7 +46,6 @@ public class User extends RepresentationModel<User> implements Serializable {
         @Embeddable
         @AllArgsConstructor
         @NoArgsConstructor
-        @ToString
         public static class Geo implements Serializable {
             String lat;
             String lng;
@@ -60,7 +56,6 @@ public class User extends RepresentationModel<User> implements Serializable {
     @Embeddable
     @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class Company implements Serializable {
         @Column(insertable = false, updatable = false)
         String name;

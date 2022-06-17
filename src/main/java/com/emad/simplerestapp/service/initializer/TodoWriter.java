@@ -1,17 +1,11 @@
 package com.emad.simplerestapp.service.initializer;
 
-import com.emad.simplerestapp.model.Todo;
 import com.emad.simplerestapp.service.api.TodoService;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.emad.simplerestapp.staticvalues.ResourceName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 
 @Component
 public class TodoWriter implements CommandLineRunner {
@@ -21,17 +15,10 @@ public class TodoWriter implements CommandLineRunner {
     public TodoWriter(TodoService todoService) {
         this.todoService = todoService;
     }
+
     @Override
     public void run(String... args) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<List<Todo>> typeReference = new TypeReference<List<Todo>>(){};
-        InputStream inputStream = TypeReference.class.getResourceAsStream("/static/todos.json");
-        try {
-            List<Todo> todoList = mapper.readValue(inputStream,typeReference);
-            todoService.save(todoList);
-            logger.info("todos was saved");
-        } catch (IOException e){
-            logger.error("Unable to save todos: " + e.getMessage());
-        }
+        todoService.save(todoService.fetchFromResource(ResourceName.TODOS_RESOURCE));
+        logger.info("todos was saved on db");
     }
 }

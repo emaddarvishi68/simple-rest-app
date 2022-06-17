@@ -2,16 +2,18 @@ logging:
     level:
         org:
             hibernate:
-                SQL: DEBUG
+                SQL: off
                 type:
                     descriptor:
                         sql:
-                            BasicBinder: TRACE
+                            BasicBinder: off
             springframework:
+                web:
+                    DEBUG
                 jdbc:
                     core:
-                        JdbcTemplate: DEBUG
-                        StatementCreatorUtils: INFO
+                        JdbcTemplate: off
+                        StatementCreatorUtils: off
 spring:
     datasource:
         driverClassName: org.h2.Driver
@@ -25,4 +27,4 @@ spring:
                 format_sql: true
                 hbm2ddl:
                     auto: create-drop
-                show_sql: true
+                show_sql: false

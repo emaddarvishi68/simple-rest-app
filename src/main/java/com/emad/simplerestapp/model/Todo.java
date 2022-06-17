@@ -1,6 +1,6 @@
 package com.emad.simplerestapp.model;
 
-import com.emad.simplerestapp.helper.TableName;
+import com.emad.simplerestapp.staticvalues.TableName;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -12,10 +12,11 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(callSuper = false)
+@NamedQueries({@NamedQuery(name = Todo.GET_TODOS_BY_USERID_AND_COMPLETED, query = "select t from Todo t where t.userId = ?1 and t.completed = ?2")})
 public class Todo extends RepresentationModel<Todo> implements Serializable {
 
+    public static final String GET_TODOS_BY_USERID_AND_COMPLETED = "todo.getTodosByUseridAndCompleted";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

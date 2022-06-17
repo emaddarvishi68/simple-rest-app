@@ -1,4 +1,4 @@
-package com.emad.simplerestapp.helper;
+package com.emad.simplerestapp.staticvalues;
 
 public class ResourceName {
 
