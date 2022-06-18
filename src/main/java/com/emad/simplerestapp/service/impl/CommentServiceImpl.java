@@ -1,6 +1,6 @@
 package com.emad.simplerestapp.service.impl;
 
-import com.emad.simplerestapp.exceptions.MasterEntityNotFoundException;
+import com.emad.simplerestapp.exception.MasterEntityNotFoundException;
 import com.emad.simplerestapp.model.Comment;
 import com.emad.simplerestapp.model.Post;
 import com.emad.simplerestapp.repository.CommentRepository;
@@ -59,31 +59,38 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(rollbackFor = Throwable.class)
     public Comment create(Comment comment) {
         Optional<Post> post = postService.getPostById(comment.getPostId());
-        if(post.isPresent()){
+        if (post.isPresent()) {
             return commentRepository.save(comment);
         }
-        throw new MasterEntityNotFoundException(String.format("There is no post with id %d",comment.getPostId()));//todo handle exception in controller advice
+        throw new MasterEntityNotFoundException(String.format("There is no post with id %d", comment.getPostId()));//todo handle exception in controller advice
     }
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void deleteByCommentId(int id) {
-        commentRepository.deleteById(id);
+    public Optional<Comment> deleteByCommentId(int id) {
+        Optional<Comment> comment = getCommentById(id);
+        comment.ifPresent(commentRepository::delete);
+        return comment;
     }
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public Comment update(Comment comment, Map<Object, Object> fields) {
-        fields.forEach((k, v) -> {
-            if (!k.toString().equalsIgnoreCase("id")) { // update any field except id
-                Field field = ReflectionUtils.findField(Comment.class, (String) k);
-                if (field != null) { //if field exists
-                    field.setAccessible(true);
-                    ReflectionUtils.setField(field, comment, v);
+    public Optional<Comment> update(int id, Map<Object, Object> fields) {
+        Optional<Comment> comment = getCommentById(id);
+        comment.ifPresent((Comment e) -> {
+                    fields.forEach((k, v) -> {
+                        if (!k.toString().equalsIgnoreCase("id")) { // update any field except id
+                            Field field = ReflectionUtils.findField(Comment.class, (String) k);
+                            if (field != null) { //if field exists
+                                field.setAccessible(true);
+                                ReflectionUtils.setField(field, comment.get(), v);
+                            }
+                        }
+                    });
                 }
-            }
-        });
-        return commentRepository.saveAndFlush(comment);
+
+        );
+        return comment;
     }
 
     @Override

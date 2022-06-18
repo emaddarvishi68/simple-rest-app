@@ -11,15 +11,11 @@ import java.util.Optional;
 public abstract class ControllersCommonMethods<T> {
 
     protected ResponseEntity<List<T>> returnResponseEntity(List<T> list) {
-        return list.isEmpty() ? new ResponseEntity<>(new ArrayList<>(), new HttpHeaders(), HttpStatus.NO_CONTENT) : new ResponseEntity<>(list, new HttpHeaders(), HttpStatus.OK);
+        return list.isEmpty() ? new ResponseEntity<>(new ArrayList<>(), new HttpHeaders(), HttpStatus.NOT_FOUND) : new ResponseEntity<>(list, new HttpHeaders(), HttpStatus.OK);
     }
 
     protected ResponseEntity<Optional<T>> returnResponseEntity(Optional<T> t) {
-        return t.isPresent() ? new ResponseEntity<>(t, new HttpHeaders(), HttpStatus.OK) : new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.NO_CONTENT);
-    }
-
-    protected ResponseEntity<Void> returnResponseEntity(HttpStatus httpStatus) {
-        return new ResponseEntity<>(null, new HttpHeaders(), httpStatus);
+        return t.isPresent() ? new ResponseEntity<>(t, new HttpHeaders(), HttpStatus.OK) : new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
 }

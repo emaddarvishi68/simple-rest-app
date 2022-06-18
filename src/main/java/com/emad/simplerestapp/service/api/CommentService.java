@@ -17,11 +17,11 @@ public interface CommentService {
 
     Comment create(Comment post);
 
-    void deleteByCommentId(int id);
+    Optional<Comment> deleteByCommentId(int id);
 
     Optional<Comment> getCommentById(int id);
 
-    Comment update(Comment comment, Map<Object, Object> fields);
+    Optional<Comment> update(int commentId, Map<Object, Object> fields);
 
     List<Comment> fetchFromResource(String resource) throws IOException;
 

@@ -1,10 +1,9 @@
 package com.emad.simplerestapp.controller;
 
 import com.emad.simplerestapp.controller.api.ControllersCommonMethods;
-import com.emad.simplerestapp.exceptions.MasterEntityNotFoundException;
+import com.emad.simplerestapp.exception.MasterEntityNotFoundException;
 import com.emad.simplerestapp.model.Comment;
 import com.emad.simplerestapp.service.api.CommentService;
-import com.emad.simplerestapp.service.api.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,23 +41,13 @@ public class CommentController extends ControllersCommonMethods<Comment> {
     }
 
     @PatchMapping(value = "/{id:\\d{1,6}}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Void> updateCommentById(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
-        Optional<Comment> comment = commentService.getCommentById(id);
-        if (comment.isPresent()) {
-            commentService.update(comment.get(), fields);
-            return returnResponseEntity(HttpStatus.OK);
-        }
-        return returnResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Optional<Comment>> updateCommentById(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
+        return returnResponseEntity(commentService.update(id, fields));
     }
 
     @DeleteMapping(value = "/{id:\\d{1,6}}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Void> deleteCommentById(@PathVariable int id) {
-        Optional<Comment> comment = commentService.getCommentById(id);
-        if (comment.isPresent()) {
-            commentService.deleteByCommentId(id);
-            return returnResponseEntity(HttpStatus.OK);
-        }
-        return returnResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Optional<Comment>> deleteCommentById(@PathVariable int id) {
+        return returnResponseEntity(commentService.deleteByCommentId(id));
     }
 
 }

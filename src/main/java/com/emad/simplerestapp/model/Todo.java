@@ -24,7 +24,6 @@ public class Todo extends RepresentationModel<Todo> implements Serializable {
     @JoinColumn(name = "id", updatable = false, insertable = false)
     @Transient
     private User user;
-
     @Column(name = "userId", nullable = false)
     private int userId;
     @Column(nullable = false)

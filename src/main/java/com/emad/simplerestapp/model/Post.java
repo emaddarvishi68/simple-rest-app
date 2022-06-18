@@ -27,7 +27,6 @@ public class Post extends RepresentationModel<Post> implements Serializable {
     @JoinColumn(name = "id", updatable = false, insertable = false)
     @Transient
     private User user;
-
     @Column(name = "userId", nullable = false)
     private Integer userId;
     @Column(nullable = false)

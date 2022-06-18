@@ -18,9 +18,9 @@ public interface PostService {
 
     Post create(Post post);
 
-    void deleteByPostId(int id);
+    Optional<Post> deleteByPostId(int id);
 
-    Post update(Post post, Map<Object, Object> fields);
+    Optional<Post> update(int id, Map<Object, Object> fields);
 
     List<Post> fetchFromResource(String resource) throws IOException;
 

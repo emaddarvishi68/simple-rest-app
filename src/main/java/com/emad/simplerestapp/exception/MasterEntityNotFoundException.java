@@ -1,4 +1,4 @@
-package com.emad.simplerestapp.exceptions;
+package com.emad.simplerestapp.exception;
 
 public class MasterEntityNotFoundException extends RuntimeException {
 

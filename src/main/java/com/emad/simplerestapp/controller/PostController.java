@@ -56,23 +56,13 @@ public class PostController extends ControllersCommonMethods<Post> {
     }
 
     @PatchMapping(value = "/{id:\\d{1,6}}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Void> updatePostById(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
-        Optional<Post> post = postService.getPostById(id);
-        if (post.isPresent()) {
-            postService.update(post.get(), fields);
-            return returnResponseEntity(HttpStatus.OK);
-        }
-        return returnResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Optional<Post>> updatePostById(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
+        return returnResponseEntity(postService.update(id,fields));
     }
 
     @DeleteMapping(value = "/{id:\\d{1,6}}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Void> deletePostById(@PathVariable int id) {
-        Optional<Post> post = postService.getPostById(id);
-        if (post.isPresent()) {
-            postService.deleteByPostId(id);
-            return returnResponseEntity(HttpStatus.OK);
-        }
-        return returnResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Optional<Post>> deletePostById(@PathVariable int id) {
+        return returnResponseEntity(postService.deleteByPostId(id));
     }
 
 }

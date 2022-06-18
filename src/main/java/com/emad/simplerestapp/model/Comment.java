@@ -24,7 +24,6 @@ public class Comment extends RepresentationModel<Comment> implements Serializabl
     @JoinColumn(name = "id")
     @Transient
     private Post post;
-
     @Column(name = "postId", nullable = false)
     private int postId;
     @Column(nullable = false)

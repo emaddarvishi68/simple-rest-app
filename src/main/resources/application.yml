@@ -1,3 +1,4 @@
+
 logging:
     level:
         org:
@@ -28,3 +29,5 @@ spring:
                 hbm2ddl:
                     auto: create-drop
                 show_sql: false
+server:
+  port: 8081

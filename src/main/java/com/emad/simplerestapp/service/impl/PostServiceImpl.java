@@ -65,23 +65,30 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void deleteByPostId(int id) {
-        postRepository.deleteById(id);
+    public Optional<Post> deleteByPostId(int id) {
+        Optional<Post> post = getPostById(id);
+        post.ifPresent(postRepository::delete);
+        return post;
     }
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public Post update(Post post, Map<Object, Object> fields) {
-        fields.forEach((k, v) -> {
-            if (!k.toString().equalsIgnoreCase("id")) { // update any field except id
-                Field field = ReflectionUtils.findField(Post.class, (String) k);
-                if (field != null) { //if field exists
-                    field.setAccessible(true);
-                    ReflectionUtils.setField(field, post, v);
+    public Optional<Post> update(int id, Map<Object, Object> fields) {
+        Optional<Post> post = getPostById(id);
+        post.ifPresent((Post e) -> {
+                    fields.forEach((k, v) -> {
+                        if (!k.toString().equalsIgnoreCase("id")) { // update any field except id
+                            Field field = ReflectionUtils.findField(Post.class, (String) k);
+                            if (field != null) { //if field exists
+                                field.setAccessible(true);
+                                ReflectionUtils.setField(field, post.get(), v);
+                            }
+                        }
+                    });
                 }
-            }
-        });
-        return postRepository.saveAndFlush(post);
+
+        );
+        return post;
     }
 
     @Override
