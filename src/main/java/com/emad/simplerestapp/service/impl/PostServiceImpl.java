@@ -77,11 +77,12 @@ public class PostServiceImpl implements PostService {
                     if (!k.toString().equalsIgnoreCase("id")) { // update any field except id
                         Field field = ReflectionUtils.findField(Post.class, (String) k);
                         if (field != null) { //if field exists
+                            field.setAccessible(true);
                             ReflectionUtils.setField(field, post.get(), v);
                         }
                     }
                 }));
-        return post;
+        return post.map(postRepository::save);
     }
 
     @Override

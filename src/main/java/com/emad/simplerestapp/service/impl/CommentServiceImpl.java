@@ -83,6 +83,7 @@ public class CommentServiceImpl implements CommentService {
                     if (!k.toString().equalsIgnoreCase("id")) { // update any field except id
                         Field field = ReflectionUtils.findField(Comment.class, (String) k);
                         if (field != null) { //if field exists
+                            field.setAccessible(true);
                             ReflectionUtils.setField(field, e, v);
                         }
                     }
