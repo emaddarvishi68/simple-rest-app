@@ -1,8 +1,6 @@
 package com.emad.simplerestapp.model;
 
-import com.emad.simplerestapp.staticvalues.TableName;
 import lombok.*;
-import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,7 +10,8 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends RepresentationModel<User> implements Serializable {
+@Builder
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

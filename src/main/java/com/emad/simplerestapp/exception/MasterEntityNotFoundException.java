@@ -1,9 +1,7 @@
 package com.emad.simplerestapp.exception;
 
-public class MasterEntityNotFoundException extends RuntimeException {
-
-    public MasterEntityNotFoundException(String message) {
-        super(message);
+public class MasterEntityNotFoundException extends Exception {
+    public MasterEntityNotFoundException(String s) {
+        super(s);
     }
-
 }
