@@ -17,3 +17,5 @@ this application used technologies :
     <li>Spring AOP</li>
     <li>Swagger</li>
 </ul>
+
+in this project i used from Lombok.please install this plugin on your IDE and enable "Annotation Processing" 

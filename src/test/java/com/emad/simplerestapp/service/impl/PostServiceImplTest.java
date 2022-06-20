@@ -2,7 +2,9 @@ package com.emad.simplerestapp.service.impl;
 
 import com.emad.simplerestapp.exception.MasterEntityNotFoundException;
 import com.emad.simplerestapp.model.Post;
+import com.emad.simplerestapp.model.User;
 import com.emad.simplerestapp.repository.PostRepository;
+import com.emad.simplerestapp.service.api.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +27,7 @@ public class PostServiceImplTest {
     @Mock
     PostRepository postRepository;
     @Mock
-    ObjectMapper objectMapper;
+    UserService userService;
 
     @BeforeEach
     public void init() {
@@ -45,16 +47,25 @@ public class PostServiceImplTest {
         return Arrays.asList(post1, post2, post3);
     }
 
+    private Post getPostWithUserId(int userId) {
+        return Post.builder().
+                body("test")
+                .id(1000)
+                .userId(userId)
+                .title("test")
+                .build();
+    }
+
     private Post getPost() {
         return getPostList2().stream().findFirst().get();
     }
 
     @Test
     public void saveTest() {
-        init();
         List<Post> posts = getPostList1();
-        Iterable<Post> save = postService.save(posts);
-        verify(postRepository, times(1)).saveAll(save);
+        when(postRepository.saveAll(posts)).thenReturn(posts);
+        List<Post> saveList = (List<Post>) postService.save(posts);
+        assertFalse(saveList.isEmpty());
     }
 
     @Test
@@ -66,25 +77,17 @@ public class PostServiceImplTest {
 
         when(postRepository.findAll(PageRequest.of(pageNumber, pageSize))).thenReturn(postPages1);
         Page<Post> postPages2 = postService.getAllPosts(pageNumber, pageSize);
-        assertEquals(2, postPages2.stream().count());
+        assertEquals(postPages1.getSize(), postPages2.stream().count());
     }
 
     @Test
     public void createTest1() throws MasterEntityNotFoundException {
-        Post post = getPostList1().get(1);
-        when(postRepository.save(post)).thenReturn(post);
-        Optional<Post> savedPost = postService.create(post);
-        assertTrue(savedPost.isPresent());
-    }
-
-    @Test
-    public void createTest2() {
-        Post post = Post.builder().userId(100).title("test").body("test").id(4).build();
-        when(postRepository.save(post)).thenReturn(post);
+        Post post = getPostWithUserId(10000);
+        when(userService.getUserById(post.getUserId()))
+                .thenReturn(Optional.ofNullable(User.builder().id(1000).build()));
         assertThrows(MasterEntityNotFoundException.class, () -> {
             postService.create(post);
         });
-        verify(postRepository, times(1)).save(any(Post.class));
     }
 
     @Test
@@ -126,32 +129,17 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void updateTest1() {
-        Post post = Post.builder().id(100).body("100").title("100").userId(100).build();
-        Map<Object, Object> fields = new HashMap<>();
-        fields.put("id", 200);
-        when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
-        when(postService.getPostById(post.getId())).thenReturn(Optional.of(post));
-        assertThrows(MasterEntityNotFoundException.class, () -> {
-            postService.update(post.getId(), fields);
-        });
-        verify(postRepository, times(1)).save(post);
-
-    }
-
-    @Test
-    public void updateTest2() {
+    public void updateTest() {
         Post post = getPost();
         String title = "emad";
         Map<Object, Object> fields = new HashMap<>();
         fields.put("title", title);
         when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
         when(postService.getPostById(post.getId())).thenReturn(Optional.of(post));
+        when(postRepository.save(post)).thenReturn(post);
 
-        Optional<Post> update = postService.update(post.getId(), fields);
-        Post saved = verify(postRepository, times(1)).save(post);
-        assertEquals(title, saved.getTitle());
-
+        Optional<Post> updatedPost = postService.update(post.getId(), fields);
+        assertEquals(title, updatedPost.get().getTitle());
     }
 
 }
