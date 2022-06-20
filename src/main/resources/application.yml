@@ -29,8 +29,7 @@ spring:
                 hbm2ddl:
                     auto: create-drop
                 show_sql: false
-#server:
-#  port: 8081
 server:
     servlet:
         context-path: /api
+    port: 8081

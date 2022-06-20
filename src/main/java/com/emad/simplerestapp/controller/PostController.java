@@ -88,7 +88,7 @@ public class PostController extends ControllersCommonMethods<Post> {
 
     @ApiOperation(value = "Create a post", response = ResponseEntity.class)
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Void> create(@RequestBody Post post) {
+    public ResponseEntity<Void> create(@RequestBody Post post) throws MasterEntityNotFoundException {
         Optional<Post> createdPost = postService.create(post);
         if (createdPost.isPresent()) {
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdPost.get().getId()).toUri();

@@ -1,8 +1,11 @@
 package com.emad.simplerestapp.service.impl;
 
+import com.emad.simplerestapp.exception.MasterEntityNotFoundException;
 import com.emad.simplerestapp.model.Post;
+import com.emad.simplerestapp.model.User;
 import com.emad.simplerestapp.repository.PostRepository;
 import com.emad.simplerestapp.service.api.PostService;
+import com.emad.simplerestapp.service.api.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
@@ -24,10 +27,12 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final ObjectMapper objectMapper;
+    private UserService userService;
 
-    public PostServiceImpl(PostRepository postRepository, ObjectMapper objectMapper) {
+    public PostServiceImpl(PostRepository postRepository, ObjectMapper objectMapper , UserService userService) {
         this.postRepository = postRepository;
         this.objectMapper = objectMapper;
+        this.userService = userService;
     }
 
     @Override
@@ -56,7 +61,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public Optional<Post> create(Post post) {
+    public Optional<Post> create(Post post) throws MasterEntityNotFoundException {
+        userService.getUserById(post.getUserId()).orElseThrow(() -> new MasterEntityNotFoundException("There is no user with id: " + post.getUserId()));
         return Optional.of(postRepository.save(post));
     }
 

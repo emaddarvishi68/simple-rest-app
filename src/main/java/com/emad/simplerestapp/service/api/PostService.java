@@ -1,5 +1,6 @@
 package com.emad.simplerestapp.service.api;
 
+import com.emad.simplerestapp.exception.MasterEntityNotFoundException;
 import com.emad.simplerestapp.model.Post;
 import org.springframework.data.domain.Page;
 
@@ -50,7 +51,7 @@ public interface PostService {
      * @return Optional<Post>
      */
 
-    Optional<Post> create(Post post);
+    Optional<Post> create(Post post) throws MasterEntityNotFoundException;
 
     /**
      * delete a Post by id

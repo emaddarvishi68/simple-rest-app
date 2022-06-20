@@ -28,6 +28,7 @@ public class PostAssembler extends RepresentationModelAssemblerSupport<Post, Pos
         post.setId(entity.getId());
         post.setBody(entity.getBody());
         post.setTitle(entity.getTitle());
+        post.setUserId(entity.getUserId());
 
         return post;
     }

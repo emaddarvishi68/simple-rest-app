@@ -70,7 +70,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void createTest1() {
+    public void createTest1() throws MasterEntityNotFoundException {
         Post post = getPostList1().get(1);
         when(postRepository.save(post)).thenReturn(post);
         Optional<Post> savedPost = postService.create(post);
