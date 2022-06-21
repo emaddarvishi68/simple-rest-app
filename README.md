@@ -13,7 +13,6 @@ this application used technologies :
     <li>SLF4J Logger</li>
     <li>Maven</li>
     <li>Spring HATEOAS</li>
-    <li>Spring MVC</li>
     <li>Spring AOP</li>
     <li>Swagger</li>
 </ul>
