@@ -4,6 +4,7 @@ import com.emad.simplerestapp.exception.MasterEntityNotFoundException;
 import com.emad.simplerestapp.model.Post;
 import com.emad.simplerestapp.model.User;
 import com.emad.simplerestapp.repository.PostRepository;
+import com.emad.simplerestapp.repository.UserRepository;
 import com.emad.simplerestapp.service.api.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,8 @@ public class PostServiceImplTest {
     PostRepository postRepository;
     @Mock
     UserService userService;
+    @Mock
+    UserRepository userRepository;
 
     @BeforeEach
     public void init() {
@@ -69,7 +72,7 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void getAllPostsTest() {
+    public void getAllPostsTest1() {
         Page<Post> postPages1 = new PageImpl<>(getPostList1());
 
         int pageNumber = 0;
@@ -81,17 +84,45 @@ public class PostServiceImplTest {
     }
 
     @Test
+    public void getAllPostsTest2() {
+        Page<Post> postPages1 = new PageImpl<>(getPostList1());
+        Page<Post> postPages2 = new PageImpl<>(getPostList2());
+
+        int pageNumber = 5;
+        int pageSize = 10;
+
+        when(postRepository.findAll(PageRequest.of(pageNumber, pageSize))).thenReturn(postPages2);
+        Page<Post> postPages3 = postService.getAllPosts(pageNumber, pageSize);
+        assertEquals(postPages1.getSize(), postPages3.stream().count());
+    }
+
+    @Test
     public void createTest1() throws MasterEntityNotFoundException {
         Post post = getPostWithUserId(10000);
         when(userService.getUserById(post.getUserId()))
-                .thenReturn(Optional.ofNullable(User.builder().id(1000).build()));
+                .thenReturn(Optional.empty());
         assertThrows(MasterEntityNotFoundException.class, () -> {
             postService.create(post);
         });
     }
 
     @Test
-    public void getAllPostsByTitleTest() {
+    public void createTest2() throws MasterEntityNotFoundException {
+        int userId = 1000;
+        Post post = getPostWithUserId(userId);
+        Optional<User> user = Optional.ofNullable(User.builder().id(userId).build());
+        when(userRepository.findById(userId))
+                .thenReturn(user);
+        when(userService.getUserById(userId))
+                .thenReturn(user);
+        when(postRepository.save(post))
+                .thenReturn(post);
+        Optional<Post> post1 = postService.create(post);
+        assertEquals(post1.get(),post);
+    }
+
+    @Test
+    public void getAllPostsByTitleTest1() {
         when(postRepository.getAllPostsByTitle("emad")).thenReturn(getPostList1());
         List<Post> allPostsByTitle = postService.getAllPostsByTitle("emad");
         assertEquals(allPostsByTitle.size(), getPostList1().size());

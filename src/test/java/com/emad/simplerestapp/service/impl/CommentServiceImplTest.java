@@ -37,8 +37,6 @@ public class CommentServiceImplTest {
     }
 
     private List<Comment> getCommentList1() {
-        Post post1 = Post.builder().id(1).body("post1").title("post1").userId(1).build();
-        Post post2 = Post.builder().id(2).body("post2").title("post2").userId(2).build();
         Comment comment1 = Comment.builder().id(1).body("comment1").email("comment1").name("comment1").postId(1).build();
         Comment comment2 = Comment.builder().id(2).body("comment2").email("comment2").name("comment2").postId(2).build();
         return Arrays.asList(comment1, comment2);
